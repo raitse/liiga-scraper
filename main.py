@@ -7,18 +7,21 @@ from terminaltables import SingleTable
 
 
 def main():
-    get_html_from_source()
+    html_content = get_html_from_source()
+    match_results = parse_html(html_content)
+    printer(match_results)
 
 
 def get_html_from_source():
     url = "https://liiga.fi/fi/ohjelma"
     options = Options()
-    # options.add_argument("--headless=new")
+    options.add_argument("--headless=new")
+    options.add_argument("start-maximized")
     driver = webdriver.Chrome(options=options)
     driver.get(url)
     page_source = driver.page_source
     driver.quit()
-    parse_html(page_source)
+    return page_source
 
 
 def parse_html(html_content):
@@ -75,7 +78,7 @@ def parse_html(html_content):
                     "crowd": game_crowd.strip(),
                 }
             )
-        printer(match_results_list)
+        return match_results_list
 
 
 def printer(match_results):
